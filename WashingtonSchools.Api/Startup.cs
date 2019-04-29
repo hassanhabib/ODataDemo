@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OData.Edm;
 using WashingtonSchools.Api.Models;
 
 namespace WashingtonSchools.Api
@@ -49,9 +51,18 @@ namespace WashingtonSchools.Api
             app.UseHttpsRedirection();
             app.UseMvc(routeBuilder =>
             {
-                routeBuilder.EnableDependencyInjection();
+                //routeBuilder.EnableDependencyInjection();
                 routeBuilder.Expand().Select().Count().OrderBy().Filter();
+                routeBuilder.MapODataServiceRoute("odata", "odata", GetEdmModel());
             });
+        }
+
+        private static IEdmModel GetEdmModel()
+        {
+            var builder = new ODataConventionModelBuilder();
+            builder.EntitySet<School>("Schools");
+            builder.EntitySet<Student>("Students");
+            return builder.GetEdmModel();
         }
     }
 }

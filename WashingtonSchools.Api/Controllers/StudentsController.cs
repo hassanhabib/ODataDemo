@@ -10,8 +10,8 @@ using WashingtonSchools.Api.Models;
 
 namespace WashingtonSchools.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
     public class StudentsController : ControllerBase
     {
         private readonly WSDbContext _context;
